@@ -1,0 +1,551 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\geometry{margin=2.5cm}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+\title{\textbf{Informe Final}\\Priorización de Casos Clínicos Bajo Recursos Limitados}
+\author{Proyecto Final de Inteligencia Artificial y Simulación}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Repositorio & \url{https://github.com/hughescard/AI-Clinical_Priority_Simulation} \\
+Commit de referencia & \texttt{31366aa6f54b6897c9569aa21054894491407471} \\
+Fuente de datos & \texttt{mimic\_iv\_ed} \\
+Proveedor LLM final & \texttt{Ollama} local \\
+Modelo LLM & \texttt{llama3.2:3b} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Resumen}
+
+Este proyecto desarrolla un sistema de simulación y planificación inteligente para priorizar pacientes en un servicio de urgencias bajo restricciones de recursos clínicos. El sistema integra una simulación de eventos discretos, un módulo de enriquecimiento clínico mediante LLM, un conjunto de algoritmos de planificación y una capa de evaluación experimental reproducible.
+
+La corrida experimental final evaluó cinco algoritmos: FIFO, Greedy, $A^*$, CP-SAT y Simulated Annealing. Se ejecutaron tres escenarios: condiciones normales, alta demanda y recursos limitados. Cada combinación de escenario y algoritmo fue evaluada con 10 réplicas de 480 minutos, para un total de 150 simulaciones. El enriquecimiento clínico de la corrida final utilizó Ollama local con el modelo \texttt{llama3.2:3b}, con cero fallbacks a \texttt{mock} y 3200 ejecuciones exitosas registradas del proveedor Ollama.
+
+Los resultados muestran que $A^*$ obtuvo el mejor ranking global balanceado en los tres escenarios. FIFO conservó la ventaja computacional por su bajo overhead de planificación, mientras que Simulated Annealing fue competitivo en métricas clínicas y operativas. CP-SAT no dominó en este entorno dinámico, lo que sugiere que su utilidad puede ser mayor en horizontes de optimización más estáticos o globales.
+
+\section{Descripción del problema}
+
+Los servicios de urgencias operan bajo incertidumbre y presión de recursos. La llegada de pacientes no es completamente predecible, los niveles de riesgo pueden cambiar durante la espera, y los recursos clínicos ---médicos, enfermeros, camas, monitores y salas especializadas--- son limitados. En ese contexto, la decisión de qué paciente atender primero no puede depender únicamente del orden de llegada.
+
+El problema abordado consiste en seleccionar, en cada instante de decisión, qué paciente o grupo de pacientes debe recibir atención, considerando:
+
+\begin{itemize}
+    \item el riesgo clínico inicial;
+    \item el deterioro esperado durante la espera;
+    \item el tiempo máximo recomendable antes de atención;
+    \item los recursos requeridos por cada paciente;
+    \item la disponibilidad de recursos;
+    \item el impacto operativo de cada algoritmo de decisión.
+\end{itemize}
+
+El objetivo no es reemplazar una decisión médica real, sino construir un entorno experimental para comparar estrategias algorítmicas de priorización bajo condiciones controladas.
+
+\section{Modelado formal}
+
+El sistema se modela como una simulación de eventos discretos con planificación periódica y despacho continuo.
+
+Sea:
+
+\begin{itemize}
+    \item $P = \{p_1, p_2, \dots, p_n\}$ el conjunto de pacientes.
+    \item $R = \{r_1, r_2, \dots, r_m\}$ el conjunto de recursos clínicos.
+    \item $c_r$ la capacidad disponible del recurso $r \in R$.
+    \item $Q_i \subseteq R$ el conjunto de recursos requeridos por el paciente $p_i$.
+    \item $a_i$ el tiempo de llegada del paciente.
+    \item $s_i$ el tiempo estimado de servicio.
+    \item $w_i^{max}$ el tiempo máximo recomendado de espera.
+    \item $\lambda_i$ la tasa de deterioro estimada.
+    \item $\rho_i(t)$ el riesgo clínico dinámico del paciente en el tiempo $t$.
+\end{itemize}
+
+Una formulación simplificada del deterioro puede expresarse como:
+
+\[
+\rho_i(t) = \rho_i(a_i) + \lambda_i \cdot (t-a_i)
+\]
+
+para pacientes que permanecen en espera. La simulación mantiene una cola de eventos:
+
+\[
+E = \{(t, tipo, paciente, metadatos)\}
+\]
+
+ordenada por tiempo. Cada evento actualiza el estado del sistema y puede generar nuevos eventos.
+
+La asignación de un paciente es factible si sus recursos requeridos están disponibles:
+
+\[
+\forall r \in R: \sum_{p_i \in S_t} \mathbf{1}(r \in Q_i) \leq c_r(t)
+\]
+
+donde $S_t$ es el conjunto de pacientes seleccionados para iniciar servicio en el tiempo $t$.
+
+La evaluación experimental se realiza sobre un vector de métricas, no sobre un único objetivo clínico. Conceptualmente, el sistema busca reducir:
+
+\[
+J = \alpha \cdot \overline{W} + \beta \cdot L_{crit} + \gamma \cdot I_{clin} + \eta \cdot H
+\]
+
+donde $\overline{W}$ es la espera promedio, $L_{crit}$ es el número de pacientes críticos atendidos tarde, $I_{clin}$ es el impacto clínico acumulado y $H$ es el overhead de planificación.
+
+\section{Dataset utilizado}
+
+La validación final usa la fuente \texttt{mimic\_iv\_ed}, basada en MIMIC-IV-ED Demo. MIMIC-IV-ED es una base de datos de admisiones al departamento de emergencias del Beth Israel Deaconess Medical Center entre 2011 y 2019, con datos desidentificados y variables relevantes para análisis de urgencias, como triaje y signos vitales \cite{mimiciv_ed}. MIMIC-IV forma parte de la familia de bases de datos clínicas públicas mantenidas a través de PhysioNet \cite{mimiciv,physionet}.
+
+En la implementación, el dataset se consume mediante una capa de ingesta que normaliza los registros hacia el modelo interno de paciente. El archivo configurado para la corrida final fue:
+
+\begin{verbatim}
+../data/raw/mimic-iv-ed-demo/ed/triage.csv
+\end{verbatim}
+
+El dataset no se versiona en Git por razones de tamaño, permisos y reproducibilidad controlada. En el repositorio se conserva la configuración y los artefactos agregados de resultados.
+
+\subsection{Adecuación al problema}
+
+El dataset cumple con las condiciones del problema porque contiene información clínica inicial de pacientes de urgencias, lo que permite construir casos con nivel de urgencia, signos vitales, información de triaje, variables de riesgo, estimaciones de recursos necesarios y escenarios comparables entre algoritmos.
+
+\section{Arquitectura general}
+
+El sistema se organiza en cinco componentes principales.
+
+\subsection{Backend FastAPI}
+
+El backend expone endpoints para ejecutar simulaciones individuales, comparar algoritmos por escenario, exportar resultados, analizar rankings y validar configuraciones.
+
+\subsection{Motor de simulación}
+
+El motor implementa una simulación de eventos discretos. Los eventos principales son llegada de paciente, evaluación inicial, inicio de servicio, fin de servicio, actualización de deterioro, inicio y fin de ronda médica e intento de despacho.
+
+\subsection{Enriquecimiento clínico con LLM}
+
+El módulo LLM convierte información clínica textual en variables estructuradas usadas por el simulador y los algoritmos.
+
+\subsection{Módulo de planificación}
+
+Incluye algoritmos FIFO, Greedy, $A^*$, CP-SAT y Simulated Annealing.
+
+\subsection{Frontend}
+
+El frontend React permite ejecutar simulaciones, comparar algoritmos, visualizar rankings, revisar líneas temporales y configurar recursos avanzados.
+
+\section{Modelo de simulación}
+
+La simulación representa una jornada operativa de urgencias durante 480 minutos. Los pacientes llegan, son evaluados, esperan si no hay recursos disponibles y pueden deteriorarse durante la espera.
+
+\subsection{Flujo de eventos}
+
+\begin{enumerate}
+    \item Llegada del paciente.
+    \item Evaluación inicial.
+    \item Intento de despacho.
+    \item Inicio de servicio.
+    \item Fin de servicio.
+    \item Actualización de deterioro.
+    \item Ronda médica.
+\end{enumerate}
+
+\subsection{Rondas médicas no instantáneas}
+
+A diferencia de un checkpoint instantáneo, las rondas médicas se modelan como eventos con duración simulada. En \texttt{DOCTOR\_ROUND\_START} se calcula la duración de la ronda a partir de la duración base, el número de pacientes esperando y el overhead de planificación del algoritmo. La planificación se aplica en \texttt{DOCTOR\_ROUND\_END}, no al inicio de la ronda. Durante la ronda, el tiempo sigue avanzando y otros eventos pueden ocurrir normalmente.
+
+\subsection{Recursos}
+
+Los recursos base del sistema son \texttt{doctor}, \texttt{nurse}, \texttt{observation\_bed}, \texttt{resuscitation\_room}, \texttt{vital\_sign\_monitor} y \texttt{laboratory}. La corrida final habilitó además \texttt{xray\_room}, \texttt{ct\_scanner}, \texttt{ultrasound\_room}, \texttt{isolation\_room}, \texttt{pharmacy} y \texttt{specialist}.
+
+\section{Rol del LLM en el sistema}
+
+El LLM no decide directamente qué paciente atender. Su rol es enriquecer cada caso clínico con variables estructuradas para que el simulador y los algoritmos puedan operar sobre ellas. La salida esperada incluye síntomas clave, categoría clínica, puntuación textual de riesgo, tasa de deterioro, tiempo máximo de espera, tiempo estimado de servicio, recursos requeridos y explicación breve.
+
+\begin{table}[H]
+\centering
+\begin{small}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\toprule
+Campo & Valor \\
+\midrule
+Fuente de datos & mimic\_iv\_ed \\
+Proveedor LLM final & ollama \\
+Modelo & llama3.2:3b \\
+Escenarios & normal, high\_demand, limited\_resources \\
+Algoritmos & fifo, greedy, astar, cpsat, simulated\_annealing \\
+Réplicas & 10 \\
+Duración por simulación & 480 minutos \\
+Recursos avanzados & True \\
+Fallback observado & 0 \\
+Corrida válida para informe & True \\
+\bottomrule
+\end{tabular}
+}%
+\end{small}
+\caption{Configuración de la corrida experimental final.}
+\label{tab:config-final}
+\end{table}
+
+\subsection{Validación del uso del LLM}
+
+El resumen de uso registrado fue:
+
+\begin{itemize}
+    \item corridas totales: 150;
+    \item proveedor usado: Ollama;
+    \item éxitos de Ollama: 3200;
+    \item fallos de Ollama: 0;
+    \item éxitos de mock: 0;
+    \item fallbacks totales: 0;
+    \item cache hits: 3035;
+    \item cache misses: 165.
+\end{itemize}
+
+La ejecución fue marcada como \texttt{report\_valid\_llm\_run = true}, por lo que los resultados pueden usarse como corrida final validada. Mistral permanece como proveedor alternativo soportado por el software, pero no fue usado en la corrida final reportada. OpenAI y Gemini no forman parte del conjunto final de proveedores soportados.
+
+\subsection{Recursos requeridos por el LLM}
+
+\begin{table}[H]
+\centering
+\begin{small}
+\begin{tabular}{ll}
+\toprule
+Recurso & Conteo requerido por LLM \\
+\midrule
+doctor & 165 \\
+nurse & 163 \\
+vital\_sign\_monitor & 149 \\
+resuscitation\_room & 63 \\
+observation\_bed & 47 \\
+laboratory & 16 \\
+xray\_room & 7 \\
+isolation\_room & 3 \\
+pharmacy & 1 \\
+\bottomrule
+\end{tabular}
+\end{small}
+\caption{Recursos requeridos por el LLM según el conteo de la cache final.}
+\label{tab:recursos-llm}
+\end{table}
+
+Estos conteos representan recursos solicitados por el enriquecimiento clínico, no necesariamente asignaciones finales, porque el artefacto experimental agregado no preserva trazas completas de asignación de recursos por paciente.
+
+\section{Diseño de los algoritmos}
+
+\subsection{FIFO}
+
+FIFO prioriza a los pacientes por orden de llegada. Es el baseline operacional más simple. Su principal ventaja es el bajo costo computacional y su principal limitación es que ignora diferencias clínicas entre pacientes.
+
+\subsection{Greedy}
+
+Greedy calcula una prioridad local con información clínica y operativa. Intenta mejorar FIFO usando riesgo, deterioro y espera, pero no explora alternativas futuras.
+
+\subsection{$A^*$}
+
+$A^*$ explora un espacio acotado de candidatos y combina costo acumulado y heurística. En el proyecto se usa como planificador local de ventanas de pacientes, priorizando reducciones de espera, atención de pacientes críticos y menor impacto clínico acumulado.
+
+\subsection{CP-SAT}
+
+CP-SAT formula la selección de pacientes como un problema de optimización con variables binarias y restricciones de recursos. Su fortaleza es expresar restricciones explícitas, pero en esta simulación dinámica opera sobre ventanas locales, no sobre un horizonte hospitalario completo.
+
+\subsection{Simulated Annealing}
+
+Simulated Annealing parte de una solución inicial y explora reordenamientos aceptando ocasionalmente soluciones peores para escapar de óptimos locales. En el proyecto actúa como metaheurística alternativa entre Greedy y $A^*$, con mejor exploración que Greedy pero mayor overhead.
+
+\section{Metodología experimental}
+
+La corrida final se diseñó para comparar los algoritmos bajo las mismas condiciones de datos, semillas y duración.
+
+\begin{itemize}
+    \item Escenarios: \texttt{normal}, \texttt{high\_demand}, \texttt{limited\_resources}.
+    \item Algoritmos: \texttt{fifo}, \texttt{greedy}, \texttt{astar}, \texttt{cpsat}, \texttt{simulated\_annealing}.
+    \item Réplicas: 10 por combinación escenario-algoritmo.
+    \item Duración de cada simulación: 480 minutos.
+    \item Total de simulaciones: 150.
+    \item Fuente de datos: MIMIC-IV-ED Demo.
+    \item Proveedor LLM final: Ollama local.
+    \item Modelo LLM: \texttt{llama3.2:3b}.
+    \item Recursos avanzados: habilitados.
+    \item Fallback permitido para informe: ninguno.
+\end{itemize}
+
+Las métricas principales fueron pacientes atendidos, pacientes no atendidos, espera promedio, espera máxima, pacientes críticos atendidos tarde, impacto clínico total, utilización promedio de recursos, tiempo total de rondas médicas, duración promedio de ronda médica y overhead de planificación.
+
+\section{Resultados y análisis}
+
+\subsection{Ranking global}
+
+\begin{table}[H]
+\centering
+\begin{small}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllll}
+\toprule
+Rango & Algoritmo & Score balanceado promedio & Rango promedio & Mejor rango & Primeros lugares \\
+\midrule
+1 & A* & 0.94 & 1.0 & 1 & 3 \\
+2 & FIFO & 0.856667 & 2.3333 & 2 & 0 \\
+3 & Simulated Annealing & 0.856666 & 2.6667 & 2 & 0 \\
+4 & CP-SAT & 0.784444 & 4.0 & 4 & 0 \\
+5 & Greedy & 0.757778 & 5.0 & 5 & 0 \\
+\bottomrule
+\end{tabular}
+}%
+\end{small}
+\caption{Ranking global balanceado por algoritmo.}
+\label{tab:ranking-global}
+\end{table}
+
+$A^*$ obtuvo el primer lugar promedio en los tres escenarios. FIFO ocupó el segundo lugar global por su fortaleza computacional, aunque no fue el mejor clínicamente. Simulated Annealing quedó muy cercano a FIFO en score balanceado, con mejor comportamiento clínico en varios indicadores pero mayor overhead.
+
+\subsection{Ranking balanceado por escenario}
+
+\begin{table}[H]
+\centering
+\begin{small}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\toprule
+Escenario & Rango & Algoritmo & Score balanceado \\
+\midrule
+Normal & 1 & A* & 0.94 \\
+Normal & 2 & FIFO & 0.863333 \\
+Normal & 3 & Simulated Annealing & 0.853333 \\
+Normal & 4 & CP-SAT & 0.78 \\
+Normal & 5 & Greedy & 0.756667 \\
+Alta demanda & 1 & A* & 0.94 \\
+Alta demanda & 2 & FIFO & 0.86 \\
+Alta demanda & 3 & Simulated Annealing & 0.853333 \\
+Alta demanda & 4 & CP-SAT & 0.79 \\
+Alta demanda & 5 & Greedy & 0.763333 \\
+Recursos limitados & 1 & A* & 0.94 \\
+Recursos limitados & 2 & Simulated Annealing & 0.863333 \\
+Recursos limitados & 3 & FIFO & 0.846667 \\
+Recursos limitados & 4 & CP-SAT & 0.783333 \\
+Recursos limitados & 5 & Greedy & 0.753333 \\
+\bottomrule
+\end{tabular}
+}%
+\end{small}
+\caption{Ranking balanceado por escenario.}
+\label{tab:ranking-escenario}
+\end{table}
+
+En condiciones normales y de alta demanda, el orden balanceado fue $A^*$, FIFO, Simulated Annealing, CP-SAT y Greedy. En recursos limitados, Simulated Annealing superó a FIFO y quedó segundo, lo que indica que su exploración de alternativas puede ser útil cuando los recursos son más restrictivos.
+
+\subsection{Métricas detalladas del escenario normal}
+
+\begin{table}[H]
+\centering
+\begin{small}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllllll}
+\toprule
+Algoritmo & Atendidos & No atendidos & Espera prom. & Espera máx. & Críticos tardíos & Impacto clínico & Overhead planificación \\
+\midrule
+FIFO & 12.5 & 5.5 & 104.891 & 238.9 & 7.6 & 49972.97 & 3.05 \\
+Greedy & 12.4 & 5.6 & 108.278 & 250.5 & 7.6 & 50944.335 & 9.15 \\
+A* & 13.1 & 4.9 & 67.79 & 193.9 & 7 & 48524.125 & 30.5 \\
+CP-SAT & 12.7 & 5.3 & 103.787 & 244.2 & 7.6 & 49422.9 & 45.75 \\
+Simulated Annealing & 13.1 & 4.9 & 98.944 & 245.2 & 7.5 & 47809.96 & 45.75 \\
+\bottomrule
+\end{tabular}
+}%
+\end{small}
+\caption{Métricas principales del escenario normal.}
+\label{tab:normal-metricas}
+\end{table}
+
+En el escenario normal, $A^*$ redujo la espera promedio de 104.891 minutos en FIFO a 67.790 minutos. Esto representa una reducción aproximada de 35.4\%. $A^*$ también aumentó pacientes atendidos de 12.5 a 13.1 y redujo pacientes no atendidos de 5.5 a 4.9. La desventaja principal fue el overhead de planificación, que pasó de 3.05 minutos en FIFO a 30.50 minutos en $A^*$.
+
+Simulated Annealing obtuvo el menor impacto clínico total en el escenario normal, con 47,809.960 frente a 49,972.970 de FIFO y 48,524.125 de $A^*$. Sin embargo, su mayor overhead redujo su posición en el ranking balanceado.
+
+\subsection{Métricas comparativas por escenario}
+
+\begin{table}[H]
+\centering
+\begin{small}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllllll}
+\toprule
+Escenario & Algoritmo & Atendidos & Espera prom. & Críticos tardíos & Impacto clínico & Overhead \\
+\midrule
+Alta demanda & A* & 13.8 & 116.87 & 12.6 & 137874.03 & 31 \\
+Alta demanda & CP-SAT & 13.1 & 153.635 & 13 & 140241.84 & 46.5 \\
+Alta demanda & FIFO & 13 & 158.526 & 13 & 141994.6 & 3.1 \\
+Alta demanda & Greedy & 12.8 & 161.962 & 13 & 143954.23 & 9.3 \\
+Alta demanda & Simulated Annealing & 13.6 & 143.955 & 13.1 & 136932.395 & 46.5 \\
+Recursos limitados & A* & 13.4 & 90.116 & 7 & 62810.04 & 30.7 \\
+Recursos limitados & CP-SAT & 13.2 & 129.686 & 7.8 & 64342.675 & 46.05 \\
+Recursos limitados & FIFO & 12.8 & 129.079 & 7.8 & 65377.455 & 3.07 \\
+Recursos limitados & Greedy & 12.6 & 132.611 & 7.8 & 66965.86 & 9.21 \\
+Recursos limitados & Simulated Annealing & 13.4 & 120.263 & 7.6 & 62168.445 & 46.05 \\
+Normal & A* & 13.1 & 67.79 & 7 & 48524.125 & 30.5 \\
+Normal & CP-SAT & 12.7 & 103.787 & 7.6 & 49422.9 & 45.75 \\
+Normal & FIFO & 12.5 & 104.891 & 7.6 & 49972.97 & 3.05 \\
+Normal & Greedy & 12.4 & 108.278 & 7.6 & 50944.335 & 9.15 \\
+Normal & Simulated Annealing & 13.1 & 98.944 & 7.5 & 47809.96 & 45.75 \\
+\bottomrule
+\end{tabular}
+}%
+\end{small}
+\caption{Resumen comparativo de métricas por escenario y algoritmo.}
+\label{tab:metricas-escenarios}
+\end{table}
+
+\subsection{Hallazgos contra FIFO}
+
+\begin{table}[H]
+\centering
+\begin{small}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\toprule
+Escenario & Hallazgo \\
+\midrule
+Normal & A* reduced Critical Late Patients by 7.9\% versus FIFO \\
+Normal & Simulated Annealing reduced Total Clinical Impact by 4.3\% versus FIFO \\
+Normal & A* reduced Average Waiting Time by 35.4\% versus FIFO \\
+Alta demanda & A* reduced Critical Late Patients by 3.1\% versus FIFO \\
+Alta demanda & Simulated Annealing reduced Total Clinical Impact by 3.6\% versus FIFO \\
+Alta demanda & A* reduced Average Waiting Time by 26.3\% versus FIFO \\
+Recursos limitados & A* reduced Critical Late Patients by 10.3\% versus FIFO \\
+Recursos limitados & Simulated Annealing reduced Total Clinical Impact by 4.9\% versus FIFO \\
+Recursos limitados & A* reduced Average Waiting Time by 30.2\% versus FIFO \\
+\bottomrule
+\end{tabular}
+}%
+\end{small}
+\caption{Hallazgos principales contra FIFO como línea base.}
+\label{tab:hallazgos-fifo}
+\end{table}
+
+Estos hallazgos muestran que $A^*$ fue especialmente fuerte en reducción de espera y pacientes críticos tardíos, mientras que Simulated Annealing destacó en reducción del impacto clínico total.
+
+\section{Discusión}
+
+Los resultados reflejan un compromiso claro entre calidad clínica, eficiencia operativa y costo computacional.
+
+$A^*$ domina el ranking balanceado porque logra fuertes reducciones de espera y buen comportamiento en pacientes críticos. Su principal costo es el overhead de planificación, pero el ranking balanceado le asigna más peso a métricas clínicas y operativas que a métricas puramente computacionales.
+
+FIFO conserva buen desempeño global debido a su simplicidad y bajo overhead. Sin embargo, sus decisiones no incorporan riesgo ni deterioro, lo que limita su utilidad en escenarios donde hay pacientes con diferentes niveles de urgencia.
+
+Greedy no alcanzó los mejores resultados. Aunque incorpora heurísticas clínicas, su visión local puede producir decisiones peores que FIFO en algunas métricas, especialmente cuando las prioridades clínicas y restricciones de recursos interactúan de forma no trivial.
+
+CP-SAT no dominó, a pesar de ser un método de optimización formal. Esto puede explicarse porque el sistema trabaja con ventanas dinámicas de despacho en una simulación de eventos discretos. CP-SAT podría ser más competitivo si se modelara un horizonte temporal más amplio o una agenda global de servicios.
+
+Simulated Annealing fue uno de los algoritmos más interesantes. En recursos limitados alcanzó el segundo lugar balanceado y en varios escenarios redujo el impacto clínico total respecto a FIFO. Esto sugiere que las metaheurísticas pueden ser útiles cuando se necesita explorar alternativas sin formular un modelo exacto completo.
+
+\section{Limitaciones y posibles mejoras}
+
+\subsection{Limitaciones}
+
+\begin{itemize}
+    \item La corrida final usa MIMIC-IV-ED Demo, no la versión completa del dataset.
+    \item El enriquecimiento LLM no constituye validación médica real.
+    \item La calidad de las variables generadas por el LLM depende del prompt, del modelo y de la normalización.
+    \item El artefacto final agregado no preserva trazas completas de asignación de recursos por paciente.
+    \item CP-SAT se usa en ventanas locales, no como optimizador global de todo el horizonte.
+    \item No se integró con sistemas hospitalarios reales.
+    \item No se calibraron pesos clínicos con expertos médicos.
+    \item La validación técnica final documentada ejecutó \texttt{compileall}; \texttt{pytest} no estaba disponible en el entorno de cierre.
+\end{itemize}
+
+\subsection{Mejoras futuras}
+
+\begin{itemize}
+    \item Guardar trazas completas de pacientes y recursos en el runner final.
+    \item Añadir calibración clínica supervisada por expertos.
+    \item Comparar varios LLMs bajo el mismo protocolo, incluyendo Mistral como proveedor alternativo soportado.
+    \item Incorporar predicción estadística de llegada de pacientes.
+    \item Implementar CP-SAT de horizonte extendido.
+    \item Añadir intervalos de confianza y pruebas estadísticas.
+    \item Integrar dashboards de análisis post-experimento.
+    \item Validar el modelo con escenarios sintéticos extremos diseñados por especialistas.
+\end{itemize}
+
+\section{Conclusiones}
+
+El proyecto cumple el objetivo de integrar simulación, enriquecimiento clínico mediante LLM y algoritmos de planificación para estudiar la priorización de pacientes bajo recursos limitados.
+
+La corrida final demuestra que $A^*$ fue el algoritmo con mejor desempeño balanceado en los tres escenarios evaluados. FIFO confirmó su valor como baseline computacionalmente barato, pero clínicamente menos expresivo. Simulated Annealing mostró resultados competitivos y podría ser una alternativa útil en escenarios con recursos limitados. CP-SAT ofreció una formulación formal, aunque en la configuración actual no dominó los resultados.
+
+El uso de Ollama local permitió ejecutar una validación final reproducible sin depender de proveedores externos, con cero fallbacks a \texttt{mock}. Mistral permanece como proveedor alternativo soportado por el software, aunque no fue usado en la corrida final reportada.
+
+\section{Reproducibilidad}
+
+El repositorio contiene:
+
+\begin{itemize}
+    \item código fuente backend: \texttt{backend/};
+    \item código fuente frontend: \texttt{frontend/};
+    \item configuración Docker: \texttt{docker-compose.yml};
+    \item variables de ejemplo: \texttt{.env.example};
+    \item resultados finales: \texttt{report/results/final\_ollama\_mimic\_iv\_ed/};
+    \item informe técnico: \texttt{report/informe\_tecnico.md}.
+\end{itemize}
+
+El commit de referencia es:
+
+\begin{verbatim}
+31366aa6f54b6897c9569aa21054894491407471
+\end{verbatim}
+
+La validación técnica documentada en el paquete del informe indica Python 3.12.3, ejecución correcta de \texttt{python3 -m compileall backend/app} y ausencia de \texttt{pytest} en el entorno de cierre.
+
+\section{Archivos de entrega}
+
+\begin{itemize}
+    \item Código fuente backend: \texttt{backend/}
+    \item Código fuente frontend: \texttt{frontend/}
+    \item Configuración Docker: \texttt{docker-compose.yml}
+    \item Variables de ejemplo: \texttt{.env.example}
+    \item Resultados finales completos: \texttt{report/results/final\_ollama\_mimic\_iv\_ed/}
+    \item Informe final Markdown: \texttt{report/informe\_final.md}
+    \item Informe final \LaTeX: \texttt{report/informe\_final.tex}
+\end{itemize}
+
+\begin{thebibliography}{9}
+
+\bibitem{mimiciv_ed}
+Johnson, A. E. W. et al.
+\textit{MIMIC-IV-ED v2.2}.
+PhysioNet.
+Disponible en: \url{https://physionet.org/content/mimic-iv-ed/}
+
+\bibitem{mimiciv}
+Johnson, A. E. W. et al.
+\textit{MIMIC-IV, a freely accessible electronic health record dataset}.
+Scientific Data, 2023.
+Disponible en: \url{https://www.nature.com/articles/s41597-022-01899-x}
+
+\bibitem{physionet}
+Goldberger, A. L. et al.
+\textit{PhysioBank, PhysioToolkit, and PhysioNet}.
+Circulation, 2000.
+Disponible en: \url{https://physionet.org/}
+
+\end{thebibliography}
+
+\end{document}
