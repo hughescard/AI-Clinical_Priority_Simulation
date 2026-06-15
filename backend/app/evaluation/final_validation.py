@@ -590,10 +590,6 @@ def build_environment_snapshot(config: FinalValidationConfig, provider_validatio
             "OLLAMA_BASE_URL": config.ollama_base_url,
             "OLLAMA_MODEL": config.ollama_model,
             "OLLAMA_TIMEOUT_SECONDS": config.ollama_timeout_seconds,
-            "MISTRAL_MODEL": os.getenv("MISTRAL_MODEL", settings.mistral_model),
-            "MISTRAL_API_KEY_CONFIGURED": bool(os.getenv("MISTRAL_API_KEY", "").strip()),
-            "OPENAI_MODEL": os.getenv("OPENAI_MODEL", settings.openai_model),
-            "OPENAI_API_KEY_CONFIGURED": bool(os.getenv("OPENAI_API_KEY", "").strip()),
         },
     }
 

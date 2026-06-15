@@ -2,6 +2,13 @@
 
 Academic emergency-room simulation project combining discrete-event simulation, LLM-based clinical enrichment, and AI planning algorithms.
 
+Final validated LLM configuration:
+
+- real provider used in the final report: `ollama`
+- model: `llama3.2:3b`
+- controlled fallback/testing provider only: `mock`
+- OpenAI, Gemini, and Mistral were not used in the final validated experiment
+
 ## Workflows
 
 ### Backend with Docker
@@ -120,14 +127,14 @@ Quick validation:
 
 ```bash
 cd backend
-LLM_PROVIDER=ollama OLLAMA_BASE_URL=http://ollama:11434 OLLAMA_MODEL=llama3.2:3b .venv/bin/python scripts/run_final_experiments.py --quick --use-advanced-resources
+LLM_PROVIDER=ollama OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.2:3b OLLAMA_TIMEOUT_SECONDS=300 .venv/bin/python scripts/run_final_experiments.py --quick --use-advanced-resources --fail-on-llm-fallback --cache-path ../data/processed/llm_cache_quick_ollama_300.json
 ```
 
 Full final run:
 
 ```bash
 cd backend
-LLM_PROVIDER=ollama OLLAMA_BASE_URL=http://ollama:11434 OLLAMA_MODEL=llama3.2:3b .venv/bin/python scripts/run_final_experiments.py --use-advanced-resources --replications 10 --duration-minutes 480
+LLM_PROVIDER=ollama OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.2:3b OLLAMA_TIMEOUT_SECONDS=300 .venv/bin/python scripts/run_final_experiments.py --use-advanced-resources --replications 10 --duration-minutes 480 --fail-on-llm-fallback --cache-path ../data/processed/llm_cache_final_ollama.json
 ```
 
 If the backend is running locally outside Docker, use:
@@ -149,6 +156,15 @@ Generated files:
 - `README.md`
 
 If the configured cache file already exists, the runner reuses it and prints a warning instead of deleting it.
+
+Final validated run reference:
+
+- data source: `MIMIC-IV-ED Demo`
+- provider: `Ollama`
+- model: `llama3.2:3b`
+- fallback count: `0`
+- total runs: `150`
+- total Ollama successes: `3200`
 
 ## Patient Traceability
 
@@ -256,16 +272,6 @@ Inside Docker, always use `/app/data/...` paths for mounted datasets.
 
 ## LLM Modes
 
-### Mock LLM
-
-Use the default mock mode for deterministic local development and tests:
-
-```bash
-LLM_PROVIDER=mock
-```
-
-No API key is required.
-
 ### Ollama in Docker
 
 Ollama runs as a separate container, not inside the backend image.
@@ -283,29 +289,26 @@ Larger alternative if the machine has enough RAM/CPU:
 
 - `llama3.1:8b`
 
-Example provider-related environment values:
+Recommended environment values for final reproduction:
 
 ```bash
-LLM_PROVIDER=mistral
-LLM_FALLBACK_ORDER=mistral,ollama,mock
-MISTRAL_MODEL=mistral-small-latest
+LLM_PROVIDER=ollama
+LLM_FALLBACK_ORDER=ollama,mock
 OLLAMA_BASE_URL=http://ollama:11434
 OLLAMA_MODEL=llama3.2:3b
+OLLAMA_TIMEOUT_SECONDS=300
 ```
 
-Mistral configuration:
+### Mock LLM
 
-```bash
-MISTRAL_API_KEY=your_key_here
-MISTRAL_MODEL=mistral-small-latest
-MISTRAL_TIMEOUT_SECONDS=30
-```
+`mock` remains available only for deterministic tests and controlled fallback behavior. It was not used in the final validated run.
 
 ## Notes
 
 - Backend Docker services now include `backend` and `ollama`.
-- Recommended practical provider chain is `mistral -> ollama -> mock`.
-- Ollama remains the local fallback and mock remains the deterministic fallback for experiments.
+- Final validated experiments used `ollama` with `--fail-on-llm-fallback`.
+- Mock remains the deterministic fallback for development and test coverage.
+- Legacy provider code may still remain internally for non-final compatibility, but only Ollama was used in the validated final report workflow.
 - The frontend should continue to run locally with `npm run dev`.
 - Do not bake model downloads into the Docker image.
 - Do not commit real `.env` files, credentials, or clinical data.

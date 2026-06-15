@@ -38,13 +38,12 @@ Additional folders were created at the repository root for `data/`, `experiments
 
 Generated patients are enriched through a provider layer in `app/llm/provider.py`.
 
-Supported providers:
+Final validated provider scope:
 
-- `mock` default, deterministic keyword rules
-- `mistral` remote structured-output extraction through the Mistral API
 - `ollama` local structured-output extraction through the Ollama HTTP API
+- `mock` deterministic keyword rules used only for tests and controlled fallback behavior
 
-By default the system uses `MockClinicalExtractor`, so tests and local runs do not require API keys or outbound API calls.
+The final validated report run used Ollama only. Legacy provider code may still remain in the repository for compatibility and older tests, but it was not used in the validated final experiment.
 
 Enrichment fields:
 
@@ -59,11 +58,10 @@ Enrichment fields:
 
 Environment variables:
 
-- `LLM_PROVIDER` optional, default `mock`
-- `MISTRAL_API_KEY` required only when `LLM_PROVIDER=mistral`
-- `MISTRAL_MODEL` optional, default `mistral-small-latest`
-- `OLLAMA_BASE_URL` optional, default `http://ollama:11434`
+- `LLM_PROVIDER` optional, final validated value `ollama`
+- `OLLAMA_BASE_URL` optional, local default `http://localhost:11434`
 - `OLLAMA_MODEL` optional, default `llama3.2:3b`
+- `OLLAMA_TIMEOUT_SECONDS` optional, recommended `300` for final validation runs
 - `LLM_FALLBACK_TO_MOCK` optional, default `true`
 - `LLM_CACHE_PATH` optional file cache path
 
@@ -75,7 +73,7 @@ Cache keys include:
 - chief complaint
 - clinical description
 
-This prevents collisions between mock, Mistral, and Ollama enrichments for the same text.
+This prevents collisions between mock and Ollama enrichments for the same text in the final validated workflow.
 
 Safety notes:
 
@@ -100,12 +98,13 @@ export LLM_PROVIDER=mock
 uvicorn app.main:app --reload
 ```
 
-Run with Mistral provider:
+Run with final validated provider:
 
 ```bash
-export LLM_PROVIDER=mistral
-export MISTRAL_API_KEY=your_key_here
-export MISTRAL_MODEL=mistral-small-latest
+export LLM_PROVIDER=ollama
+export OLLAMA_BASE_URL=http://localhost:11434
+export OLLAMA_MODEL=llama3.2:3b
+export OLLAMA_TIMEOUT_SECONDS=300
 export LLM_FALLBACK_TO_MOCK=true
 uvicorn app.main:app --reload
 ```
@@ -221,14 +220,14 @@ Quick validation:
 
 ```bash
 cd backend
-LLM_PROVIDER=ollama OLLAMA_BASE_URL=http://ollama:11434 OLLAMA_MODEL=llama3.2:3b .venv/bin/python scripts/run_final_experiments.py --quick --use-advanced-resources
+LLM_PROVIDER=ollama OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.2:3b OLLAMA_TIMEOUT_SECONDS=300 .venv/bin/python scripts/run_final_experiments.py --quick --use-advanced-resources --fail-on-llm-fallback --cache-path ../data/processed/llm_cache_quick_ollama_300.json
 ```
 
 Full final run:
 
 ```bash
 cd backend
-LLM_PROVIDER=ollama OLLAMA_BASE_URL=http://ollama:11434 OLLAMA_MODEL=llama3.2:3b .venv/bin/python scripts/run_final_experiments.py --use-advanced-resources --replications 10 --duration-minutes 480
+LLM_PROVIDER=ollama OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.2:3b OLLAMA_TIMEOUT_SECONDS=300 .venv/bin/python scripts/run_final_experiments.py --use-advanced-resources --replications 10 --duration-minutes 480 --fail-on-llm-fallback --cache-path ../data/processed/llm_cache_final_ollama.json
 ```
 
 If you are running outside Docker, use:
@@ -236,6 +235,15 @@ If you are running outside Docker, use:
 ```bash
 OLLAMA_BASE_URL=http://localhost:11434
 ```
+
+Final validated run reference:
+
+- data source: `MIMIC-IV-ED Demo`
+- provider: `Ollama`
+- model: `llama3.2:3b`
+- fallback count: `0`
+- total runs: `150`
+- total Ollama successes: `3200`
 
 Generated files:
 
@@ -335,7 +343,7 @@ The same optional `advanced_config` block may be sent for experiment runs. Every
    - `pharmacy`
    - `specialist`
 2. Run with:
-   - `LLM_PROVIDER=mistral`
+   - `LLM_PROVIDER=ollama`
    - `scenario=high_demand`
    - `algorithm=greedy`
    - `duration_minutes=120` or `240`
@@ -522,5 +530,5 @@ curl -X POST http://127.0.0.1:8000/experiments/export/summary-csv \
 
 - All randomness is controlled with a seed.
 - The frontend is available under `../frontend`.
-- The default LLM path is still the deterministic mock extractor.
-- Mistral and Ollama are the only non-mock LLM providers exposed by the backend.
+- Local development can still use the deterministic mock extractor, but the final validated configuration uses Ollama only.
+- OpenAI, Gemini, and Mistral were not used in the final validated experiment.
