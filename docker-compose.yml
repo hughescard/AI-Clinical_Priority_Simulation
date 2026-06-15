@@ -1,0 +1,38 @@
+services:
+  backend:
+    build: ./backend
+    depends_on:
+      - ollama
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      LLM_PROVIDER: ${LLM_PROVIDER:-mistral}
+      LLM_FALLBACK_ORDER: ${LLM_FALLBACK_ORDER:-mistral,ollama,mock}
+      LLM_DEBUG: ${LLM_DEBUG:-false}
+      MISTRAL_MODEL: ${MISTRAL_MODEL:-mistral-small-latest}
+      MISTRAL_TIMEOUT_SECONDS: ${MISTRAL_TIMEOUT_SECONDS:-30}
+      LLM_FALLBACK_TO_MOCK: ${LLM_FALLBACK_TO_MOCK:-true}
+      LLM_CACHE_PATH: ${LLM_CACHE_PATH:-/app/data/processed/llm_cache.json}
+      MIMIC_IV_ED_TRIAGE_CSV: ${MIMIC_IV_ED_TRIAGE_CSV:-/app/data/raw/mimic-iv-ed-demo/ed/triage.csv}
+      MIETIC_CSV: ${MIETIC_CSV:-}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY:-}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:3b}
+      OLLAMA_TIMEOUT_SECONDS: ${OLLAMA_TIMEOUT_SECONDS:-90}
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
