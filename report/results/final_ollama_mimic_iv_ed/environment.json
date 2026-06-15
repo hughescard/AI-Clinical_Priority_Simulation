@@ -1,0 +1,31 @@
+{
+  "backend_root": "/home/hughes_card/Documentos/Escuela/3ro /2do semestre /IA/Proyecto Final /backend",
+  "environment": {
+    "LLM_CACHE_PATH": "../data/processed/llm_cache_final_ollama_mimic.json",
+    "LLM_FALLBACK_ORDER": "ollama,mock",
+    "LLM_FALLBACK_TO_MOCK": true,
+    "LLM_PROVIDER": "ollama",
+    "MISTRAL_API_KEY_CONFIGURED": false,
+    "MISTRAL_MODEL": "mistral-small-latest",
+    "OLLAMA_BASE_URL": "http://localhost:11434",
+    "OLLAMA_MODEL": "llama3.2:3b",
+    "OLLAMA_TIMEOUT_SECONDS": 300.0,
+    "OPENAI_API_KEY_CONFIGURED": false,
+    "OPENAI_MODEL": "gpt-4.1-mini"
+  },
+  "generated_at": "2026-06-15T04:33:11.006379+00:00",
+  "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.39",
+  "provider_validation": {
+    "available_models": [
+      "llama3.2:3b"
+    ],
+    "base_url": "http://localhost:11434",
+    "model": "llama3.2:3b",
+    "provider": "ollama",
+    "reachable": true,
+    "timeout_seconds": 300.0
+  },
+  "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+  "repo_root": "/home/hughes_card/Documentos/Escuela/3ro /2do semestre /IA/Proyecto Final ",
+  "running_inside_docker": false
+}

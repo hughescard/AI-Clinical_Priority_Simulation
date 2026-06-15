@@ -1,0 +1,55 @@
+{
+  "per_scenario": {
+    "high_demand": {
+      "provider_used_counts": {
+        "ollama": 50
+      },
+      "runs": 50,
+      "total_cache_hits": 1359,
+      "total_cache_misses": 41,
+      "total_fallback_count": 0
+    },
+    "limited_resources": {
+      "provider_used_counts": {
+        "ollama": 50
+      },
+      "runs": 50,
+      "total_cache_hits": 900,
+      "total_cache_misses": 0,
+      "total_fallback_count": 0
+    },
+    "normal": {
+      "provider_used_counts": {
+        "ollama": 50
+      },
+      "runs": 50,
+      "total_cache_hits": 776,
+      "total_cache_misses": 124,
+      "total_fallback_count": 0
+    }
+  },
+  "provider_attempt_totals": {
+    "mock": {
+      "failures": 0,
+      "successes": 0
+    },
+    "ollama": {
+      "failures": 0,
+      "successes": 3200
+    }
+  },
+  "provider_requested_counts": {
+    "ollama": 150
+  },
+  "provider_retry_totals": {
+    "mock": 0,
+    "ollama": 0
+  },
+  "provider_used_counts": {
+    "ollama": 150
+  },
+  "total_cache_hits": 3035,
+  "total_cache_misses": 165,
+  "total_fallback_count": 0,
+  "total_runs": 150
+}

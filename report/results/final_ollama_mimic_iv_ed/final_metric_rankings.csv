@@ -1,0 +1,211 @@
+scenario,metric_name,display_label,direction,rank,algorithm,mean,std,min,max,practical_tie_group
+normal,average_resource_utilization,Average Resource Utilization,higher_is_better,1,greedy,0.3312,0.0138,0.3125,0.3563,1
+normal,average_resource_utilization,Average Resource Utilization,higher_is_better,1,fifo,0.3306,0.0136,0.311,0.3547,1
+normal,average_resource_utilization,Average Resource Utilization,higher_is_better,1,cpsat,0.3287,0.0122,0.3105,0.3455,1
+normal,average_resource_utilization,Average Resource Utilization,higher_is_better,1,astar,0.3259,0.0112,0.3008,0.3475,1
+normal,average_resource_utilization,Average Resource Utilization,higher_is_better,1,simulated_annealing,0.3252,0.0106,0.3088,0.3449,1
+normal,average_time_to_service_start,Average Time To Service Start,lower_is_better,1,astar,67.79,20.4112,41.69,103.54,1
+normal,average_time_to_service_start,Average Time To Service Start,lower_is_better,2,simulated_annealing,98.944,20.4731,61.14,137.92,2
+normal,average_time_to_service_start,Average Time To Service Start,lower_is_better,3,cpsat,103.787,18.5281,65.77,132.82,3
+normal,average_time_to_service_start,Average Time To Service Start,lower_is_better,3,fifo,104.891,23.3825,54.5,132.82,3
+normal,average_time_to_service_start,Average Time To Service Start,lower_is_better,4,greedy,108.278,23.6922,56.75,132.82,4
+normal,average_waiting_time,Average Waiting Time,lower_is_better,1,astar,67.79,20.4112,41.69,103.54,1
+normal,average_waiting_time,Average Waiting Time,lower_is_better,2,simulated_annealing,98.944,20.4731,61.14,137.92,2
+normal,average_waiting_time,Average Waiting Time,lower_is_better,3,cpsat,103.787,18.5281,65.77,132.82,3
+normal,average_waiting_time,Average Waiting Time,lower_is_better,3,fifo,104.891,23.3825,54.5,132.82,3
+normal,average_waiting_time,Average Waiting Time,lower_is_better,4,greedy,108.278,23.6922,56.75,132.82,4
+normal,critical_late_patients,Critical Late Patients,lower_is_better,1,astar,7.0,2.8636,1.0,11.0,1
+normal,critical_late_patients,Critical Late Patients,lower_is_better,2,simulated_annealing,7.5,3.1064,1.0,12.0,2
+normal,critical_late_patients,Critical Late Patients,lower_is_better,2,cpsat,7.6,2.9052,2.0,12.0,2
+normal,critical_late_patients,Critical Late Patients,lower_is_better,2,fifo,7.6,2.9052,2.0,12.0,2
+normal,critical_late_patients,Critical Late Patients,lower_is_better,2,greedy,7.6,2.9052,2.0,12.0,2
+normal,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,astar,0.3,0.4583,0.0,1.0,1
+normal,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,cpsat,0.3,0.4583,0.0,1.0,1
+normal,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,fifo,0.3,0.4583,0.0,1.0,1
+normal,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,greedy,0.3,0.4583,0.0,1.0,1
+normal,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,simulated_annealing,0.3,0.4583,0.0,1.0,1
+normal,critical_patients_waited,Critical Patients Waited,lower_is_better,1,astar,1.4,1.0198,0.0,3.0,1
+normal,critical_patients_waited,Critical Patients Waited,lower_is_better,1,cpsat,1.4,1.0198,0.0,3.0,1
+normal,critical_patients_waited,Critical Patients Waited,lower_is_better,1,fifo,1.4,1.0198,0.0,3.0,1
+normal,critical_patients_waited,Critical Patients Waited,lower_is_better,1,greedy,1.4,1.0198,0.0,3.0,1
+normal,critical_patients_waited,Critical Patients Waited,lower_is_better,1,simulated_annealing,1.4,1.0198,0.0,3.0,1
+normal,max_waiting_time,Maximum Waiting Time,lower_is_better,1,astar,193.9,74.5781,89.0,317.0,1
+normal,max_waiting_time,Maximum Waiting Time,lower_is_better,2,fifo,238.9,49.111,167.0,332.0,2
+normal,max_waiting_time,Maximum Waiting Time,lower_is_better,3,cpsat,244.2,38.9636,190.0,332.0,3
+normal,max_waiting_time,Maximum Waiting Time,lower_is_better,3,simulated_annealing,245.2,37.5361,207.0,332.0,3
+normal,max_waiting_time,Maximum Waiting Time,lower_is_better,4,greedy,250.5,52.3302,167.0,332.0,4
+normal,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,astar,15.4,0.6633,14.0,16.0,1
+normal,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,simulated_annealing,15.5,0.5,15.0,16.0,1
+normal,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,cpsat,15.6,0.4899,15.0,16.0,1
+normal,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,fifo,15.6,0.4899,15.0,16.0,1
+normal,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,greedy,15.6,0.4899,15.0,16.0,1
+normal,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,astar,2.3,0.4583,2.0,3.0,1
+normal,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,cpsat,2.3,0.4583,2.0,3.0,1
+normal,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,fifo,2.3,0.4583,2.0,3.0,1
+normal,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,greedy,2.3,0.4583,2.0,3.0,1
+normal,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,simulated_annealing,2.3,0.4583,2.0,3.0,1
+normal,services_started_from_service_end,Services Started From Service End,higher_is_better,1,astar,10.8,0.6,10.0,12.0,1
+normal,services_started_from_service_end,Services Started From Service End,higher_is_better,1,simulated_annealing,10.8,0.7483,10.0,12.0,1
+normal,services_started_from_service_end,Services Started From Service End,higher_is_better,2,cpsat,10.4,0.9165,9.0,12.0,2
+normal,services_started_from_service_end,Services Started From Service End,higher_is_better,2,fifo,10.2,1.077,9.0,12.0,2
+normal,services_started_from_service_end,Services Started From Service End,higher_is_better,3,greedy,10.1,0.9434,9.0,11.0,3
+normal,total_clinical_impact,Total Clinical Impact,lower_is_better,1,simulated_annealing,47809.96,10447.6842,30681.75,61896.4,1
+normal,total_clinical_impact,Total Clinical Impact,lower_is_better,1,astar,48524.125,10894.5189,31392.75,64586.25,1
+normal,total_clinical_impact,Total Clinical Impact,lower_is_better,2,cpsat,49422.9,10180.6797,33255.5,63792.4,2
+normal,total_clinical_impact,Total Clinical Impact,lower_is_better,2,fifo,49972.97,10214.0605,33928.5,65448.5,2
+normal,total_clinical_impact,Total Clinical Impact,lower_is_better,3,greedy,50944.335,10244.9807,34758.9,67316.75,3
+normal,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,1,fifo,3.05,0.05,3.0,3.1,1
+normal,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,2,greedy,9.15,0.15,9.0,9.3,2
+normal,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,3,astar,30.5,0.5,30.0,31.0,3
+normal,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,4,cpsat,45.75,0.75,45.0,46.5,4
+normal,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,4,simulated_annealing,45.75,0.75,45.0,46.5,4
+normal,treated_patients,Treated Patients,higher_is_better,1,astar,13.1,0.5385,12.0,14.0,1
+normal,treated_patients,Treated Patients,higher_is_better,1,simulated_annealing,13.1,0.7,12.0,14.0,1
+normal,treated_patients,Treated Patients,higher_is_better,2,cpsat,12.7,0.781,11.0,14.0,2
+normal,treated_patients,Treated Patients,higher_is_better,2,fifo,12.5,0.8062,11.0,14.0,2
+normal,treated_patients,Treated Patients,higher_is_better,3,greedy,12.4,0.6633,11.0,13.0,3
+normal,untreated_patients,Untreated Patients,lower_is_better,1,astar,4.9,0.5385,4.0,6.0,1
+normal,untreated_patients,Untreated Patients,lower_is_better,1,simulated_annealing,4.9,0.7,4.0,6.0,1
+normal,untreated_patients,Untreated Patients,lower_is_better,2,cpsat,5.3,0.781,4.0,7.0,2
+normal,untreated_patients,Untreated Patients,lower_is_better,3,fifo,5.5,0.8062,4.0,7.0,3
+normal,untreated_patients,Untreated Patients,lower_is_better,3,greedy,5.6,0.6633,5.0,7.0,3
+high_demand,average_resource_utilization,Average Resource Utilization,higher_is_better,1,greedy,0.336,0.0118,0.3188,0.3548,1
+high_demand,average_resource_utilization,Average Resource Utilization,higher_is_better,1,fifo,0.3358,0.0118,0.3175,0.3548,1
+high_demand,average_resource_utilization,Average Resource Utilization,higher_is_better,1,cpsat,0.3325,0.0116,0.3136,0.3548,1
+high_demand,average_resource_utilization,Average Resource Utilization,higher_is_better,1,astar,0.3293,0.0121,0.3115,0.3514,1
+high_demand,average_resource_utilization,Average Resource Utilization,higher_is_better,2,simulated_annealing,0.3286,0.0102,0.3121,0.3455,2
+high_demand,average_time_to_service_start,Average Time To Service Start,lower_is_better,1,astar,116.87,14.5984,92.43,139.93,1
+high_demand,average_time_to_service_start,Average Time To Service Start,lower_is_better,2,simulated_annealing,143.955,12.3146,122.23,158.67,2
+high_demand,average_time_to_service_start,Average Time To Service Start,lower_is_better,3,cpsat,153.635,13.0698,120.92,168.85,3
+high_demand,average_time_to_service_start,Average Time To Service Start,lower_is_better,4,fifo,158.526,11.395,137.21,172.85,4
+high_demand,average_time_to_service_start,Average Time To Service Start,lower_is_better,5,greedy,161.962,14.4266,129.0,178.54,5
+high_demand,average_waiting_time,Average Waiting Time,lower_is_better,1,astar,116.87,14.5984,92.43,139.93,1
+high_demand,average_waiting_time,Average Waiting Time,lower_is_better,2,simulated_annealing,143.955,12.3146,122.23,158.67,2
+high_demand,average_waiting_time,Average Waiting Time,lower_is_better,3,cpsat,153.635,13.0698,120.92,168.85,3
+high_demand,average_waiting_time,Average Waiting Time,lower_is_better,4,fifo,158.526,11.395,137.21,172.85,4
+high_demand,average_waiting_time,Average Waiting Time,lower_is_better,5,greedy,161.962,14.4266,129.0,178.54,5
+high_demand,critical_late_patients,Critical Late Patients,lower_is_better,1,astar,12.6,3.7736,7.0,18.0,1
+high_demand,critical_late_patients,Critical Late Patients,lower_is_better,2,cpsat,13.0,3.5777,7.0,18.0,2
+high_demand,critical_late_patients,Critical Late Patients,lower_is_better,2,fifo,13.0,3.5777,7.0,18.0,2
+high_demand,critical_late_patients,Critical Late Patients,lower_is_better,2,greedy,13.0,3.5777,7.0,18.0,2
+high_demand,critical_late_patients,Critical Late Patients,lower_is_better,2,simulated_annealing,13.1,3.5341,7.0,18.0,2
+high_demand,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,astar,0.3,0.4583,0.0,1.0,1
+high_demand,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,cpsat,0.3,0.4583,0.0,1.0,1
+high_demand,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,fifo,0.3,0.4583,0.0,1.0,1
+high_demand,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,greedy,0.3,0.4583,0.0,1.0,1
+high_demand,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,simulated_annealing,0.3,0.4583,0.0,1.0,1
+high_demand,critical_patients_waited,Critical Patients Waited,lower_is_better,1,astar,1.8,1.1662,0.0,3.0,1
+high_demand,critical_patients_waited,Critical Patients Waited,lower_is_better,1,cpsat,1.8,1.1662,0.0,3.0,1
+high_demand,critical_patients_waited,Critical Patients Waited,lower_is_better,1,fifo,1.8,1.1662,0.0,3.0,1
+high_demand,critical_patients_waited,Critical Patients Waited,lower_is_better,1,greedy,1.8,1.1662,0.0,3.0,1
+high_demand,critical_patients_waited,Critical Patients Waited,lower_is_better,1,simulated_annealing,1.8,1.1662,0.0,3.0,1
+high_demand,max_waiting_time,Maximum Waiting Time,lower_is_better,1,astar,265.1,23.2914,213.0,295.0,1
+high_demand,max_waiting_time,Maximum Waiting Time,lower_is_better,2,simulated_annealing,341.0,26.6158,303.0,401.0,2
+high_demand,max_waiting_time,Maximum Waiting Time,lower_is_better,2,cpsat,341.3,31.0131,302.0,401.0,2
+high_demand,max_waiting_time,Maximum Waiting Time,lower_is_better,2,fifo,345.2,31.4477,296.0,401.0,2
+high_demand,max_waiting_time,Maximum Waiting Time,lower_is_better,3,greedy,351.0,29.2472,296.0,401.0,3
+high_demand,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,simulated_annealing,25.9,0.3,25.0,26.0,1
+high_demand,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,astar,26.0,0.0,26.0,26.0,1
+high_demand,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,cpsat,26.0,0.0,26.0,26.0,1
+high_demand,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,fifo,26.0,0.0,26.0,26.0,1
+high_demand,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,greedy,26.0,0.0,26.0,26.0,1
+high_demand,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,astar,2.0,0.0,2.0,2.0,1
+high_demand,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,cpsat,2.0,0.0,2.0,2.0,1
+high_demand,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,fifo,2.0,0.0,2.0,2.0,1
+high_demand,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,greedy,2.0,0.0,2.0,2.0,1
+high_demand,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,simulated_annealing,2.0,0.0,2.0,2.0,1
+high_demand,services_started_from_service_end,Services Started From Service End,higher_is_better,1,astar,11.8,0.4,11.0,12.0,1
+high_demand,services_started_from_service_end,Services Started From Service End,higher_is_better,1,simulated_annealing,11.6,0.8,10.0,13.0,1
+high_demand,services_started_from_service_end,Services Started From Service End,higher_is_better,2,cpsat,11.1,0.8307,9.0,12.0,2
+high_demand,services_started_from_service_end,Services Started From Service End,higher_is_better,2,fifo,11.0,0.7746,9.0,12.0,2
+high_demand,services_started_from_service_end,Services Started From Service End,higher_is_better,3,greedy,10.8,0.6,9.0,11.0,3
+high_demand,total_clinical_impact,Total Clinical Impact,lower_is_better,1,simulated_annealing,136932.395,12176.6391,113174.2,152186.6,1
+high_demand,total_clinical_impact,Total Clinical Impact,lower_is_better,1,astar,137874.03,12047.5622,114570.5,152578.75,1
+high_demand,total_clinical_impact,Total Clinical Impact,lower_is_better,2,cpsat,140241.84,11427.4409,117870.9,154712.7,2
+high_demand,total_clinical_impact,Total Clinical Impact,lower_is_better,2,fifo,141994.6,11528.1774,119719.0,157588.05,2
+high_demand,total_clinical_impact,Total Clinical Impact,lower_is_better,3,greedy,143954.23,11216.9585,121736.8,157540.2,3
+high_demand,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,1,fifo,3.1,0.0,3.1,3.1,1
+high_demand,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,2,greedy,9.3,0.0,9.3,9.3,2
+high_demand,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,3,astar,31.0,0.0,31.0,31.0,3
+high_demand,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,4,cpsat,46.5,0.0,46.5,46.5,4
+high_demand,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,4,simulated_annealing,46.5,0.0,46.5,46.5,4
+high_demand,treated_patients,Treated Patients,higher_is_better,1,astar,13.8,0.4,13.0,14.0,1
+high_demand,treated_patients,Treated Patients,higher_is_better,1,simulated_annealing,13.6,0.8,12.0,15.0,1
+high_demand,treated_patients,Treated Patients,higher_is_better,2,cpsat,13.1,0.8307,11.0,14.0,2
+high_demand,treated_patients,Treated Patients,higher_is_better,2,fifo,13.0,0.7746,11.0,14.0,2
+high_demand,treated_patients,Treated Patients,higher_is_better,3,greedy,12.8,0.6,11.0,13.0,3
+high_demand,untreated_patients,Untreated Patients,lower_is_better,1,astar,14.2,0.4,14.0,15.0,1
+high_demand,untreated_patients,Untreated Patients,lower_is_better,1,simulated_annealing,14.4,0.8,13.0,16.0,1
+high_demand,untreated_patients,Untreated Patients,lower_is_better,2,cpsat,14.9,0.8307,14.0,17.0,2
+high_demand,untreated_patients,Untreated Patients,lower_is_better,2,fifo,15.0,0.7746,14.0,17.0,2
+high_demand,untreated_patients,Untreated Patients,lower_is_better,2,greedy,15.2,0.6,15.0,17.0,2
+limited_resources,average_resource_utilization,Average Resource Utilization,higher_is_better,1,greedy,0.3326,0.0126,0.3152,0.3543,1
+limited_resources,average_resource_utilization,Average Resource Utilization,higher_is_better,1,fifo,0.3318,0.012,0.3137,0.3488,1
+limited_resources,average_resource_utilization,Average Resource Utilization,higher_is_better,1,cpsat,0.3293,0.0117,0.3126,0.3485,1
+limited_resources,average_resource_utilization,Average Resource Utilization,higher_is_better,1,astar,0.3292,0.0053,0.3199,0.337,1
+limited_resources,average_resource_utilization,Average Resource Utilization,higher_is_better,1,simulated_annealing,0.3277,0.0103,0.3081,0.3413,1
+limited_resources,average_time_to_service_start,Average Time To Service Start,lower_is_better,1,astar,90.116,11.0528,72.36,107.38,1
+limited_resources,average_time_to_service_start,Average Time To Service Start,lower_is_better,2,simulated_annealing,120.263,13.6228,93.14,140.25,2
+limited_resources,average_time_to_service_start,Average Time To Service Start,lower_is_better,3,fifo,129.079,14.2079,106.43,146.08,3
+limited_resources,average_time_to_service_start,Average Time To Service Start,lower_is_better,3,cpsat,129.686,13.6022,101.14,146.08,3
+limited_resources,average_time_to_service_start,Average Time To Service Start,lower_is_better,4,greedy,132.611,15.6261,100.08,149.54,4
+limited_resources,average_waiting_time,Average Waiting Time,lower_is_better,1,astar,90.116,11.0528,72.36,107.38,1
+limited_resources,average_waiting_time,Average Waiting Time,lower_is_better,2,simulated_annealing,120.263,13.6228,93.14,140.25,2
+limited_resources,average_waiting_time,Average Waiting Time,lower_is_better,3,fifo,129.079,14.2079,106.43,146.08,3
+limited_resources,average_waiting_time,Average Waiting Time,lower_is_better,3,cpsat,129.686,13.6022,101.14,146.08,3
+limited_resources,average_waiting_time,Average Waiting Time,lower_is_better,4,greedy,132.611,15.6261,100.08,149.54,4
+limited_resources,critical_late_patients,Critical Late Patients,lower_is_better,1,astar,7.0,2.9665,2.0,12.0,1
+limited_resources,critical_late_patients,Critical Late Patients,lower_is_better,2,simulated_annealing,7.6,2.9052,2.0,12.0,2
+limited_resources,critical_late_patients,Critical Late Patients,lower_is_better,3,cpsat,7.8,2.8566,2.0,12.0,3
+limited_resources,critical_late_patients,Critical Late Patients,lower_is_better,3,fifo,7.8,2.8566,2.0,12.0,3
+limited_resources,critical_late_patients,Critical Late Patients,lower_is_better,3,greedy,7.8,2.8566,2.0,12.0,3
+limited_resources,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,astar,0.3,0.4583,0.0,1.0,1
+limited_resources,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,cpsat,0.3,0.4583,0.0,1.0,1
+limited_resources,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,fifo,0.3,0.4583,0.0,1.0,1
+limited_resources,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,greedy,0.3,0.4583,0.0,1.0,1
+limited_resources,critical_patients_started_immediately,Critical Patients Started Immediately,higher_is_better,1,simulated_annealing,0.3,0.4583,0.0,1.0,1
+limited_resources,critical_patients_waited,Critical Patients Waited,lower_is_better,1,astar,1.4,1.0198,0.0,3.0,1
+limited_resources,critical_patients_waited,Critical Patients Waited,lower_is_better,1,cpsat,1.4,1.0198,0.0,3.0,1
+limited_resources,critical_patients_waited,Critical Patients Waited,lower_is_better,1,fifo,1.4,1.0198,0.0,3.0,1
+limited_resources,critical_patients_waited,Critical Patients Waited,lower_is_better,1,greedy,1.4,1.0198,0.0,3.0,1
+limited_resources,critical_patients_waited,Critical Patients Waited,lower_is_better,1,simulated_annealing,1.4,1.0198,0.0,3.0,1
+limited_resources,max_waiting_time,Maximum Waiting Time,lower_is_better,1,astar,264.0,46.5124,189.0,336.0,1
+limited_resources,max_waiting_time,Maximum Waiting Time,lower_is_better,2,fifo,284.3,32.982,230.0,343.0,2
+limited_resources,max_waiting_time,Maximum Waiting Time,lower_is_better,2,simulated_annealing,284.6,29.5337,232.0,343.0,2
+limited_resources,max_waiting_time,Maximum Waiting Time,lower_is_better,3,cpsat,291.1,27.0202,256.0,343.0,3
+limited_resources,max_waiting_time,Maximum Waiting Time,lower_is_better,3,greedy,296.4,28.9938,230.0,343.0,3
+limited_resources,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,astar,15.7,0.4583,15.0,16.0,1
+limited_resources,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,simulated_annealing,15.7,0.4583,15.0,16.0,1
+limited_resources,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,cpsat,15.9,0.3,15.0,16.0,1
+limited_resources,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,fifo,15.9,0.3,15.0,16.0,1
+limited_resources,patients_deteriorated_while_waiting,Patients Deteriorated While Waiting,lower_is_better,1,greedy,15.9,0.3,15.0,16.0,1
+limited_resources,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,astar,2.1,0.3,2.0,3.0,1
+limited_resources,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,cpsat,2.1,0.3,2.0,3.0,1
+limited_resources,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,fifo,2.1,0.3,2.0,3.0,1
+limited_resources,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,greedy,2.1,0.3,2.0,3.0,1
+limited_resources,services_started_from_arrival,Services Started From Arrival,higher_is_better,1,simulated_annealing,2.1,0.3,2.0,3.0,1
+limited_resources,services_started_from_service_end,Services Started From Service End,higher_is_better,1,astar,11.3,0.781,10.0,12.0,1
+limited_resources,services_started_from_service_end,Services Started From Service End,higher_is_better,1,simulated_annealing,11.3,0.781,10.0,12.0,1
+limited_resources,services_started_from_service_end,Services Started From Service End,higher_is_better,1,cpsat,11.1,0.9434,9.0,12.0,1
+limited_resources,services_started_from_service_end,Services Started From Service End,higher_is_better,2,fifo,10.7,1.005,9.0,12.0,2
+limited_resources,services_started_from_service_end,Services Started From Service End,higher_is_better,2,greedy,10.5,0.8062,9.0,11.0,2
+limited_resources,total_clinical_impact,Total Clinical Impact,lower_is_better,1,simulated_annealing,62168.445,8428.371,47962.1,75926.0,1
+limited_resources,total_clinical_impact,Total Clinical Impact,lower_is_better,1,astar,62810.04,8506.7437,47337.2,74649.0,1
+limited_resources,total_clinical_impact,Total Clinical Impact,lower_is_better,2,cpsat,64342.675,8249.3385,49904.3,77791.0,2
+limited_resources,total_clinical_impact,Total Clinical Impact,lower_is_better,2,fifo,65377.455,7900.0054,51521.3,77791.0,2
+limited_resources,total_clinical_impact,Total Clinical Impact,lower_is_better,3,greedy,66965.86,7639.4622,52766.7,77791.0,3
+limited_resources,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,1,fifo,3.07,0.0458,3.0,3.1,1
+limited_resources,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,2,greedy,9.21,0.1375,9.0,9.3,2
+limited_resources,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,3,astar,30.7,0.4583,30.0,31.0,3
+limited_resources,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,4,cpsat,46.05,0.6874,45.0,46.5,4
+limited_resources,total_planning_overhead_time,Total Planning Overhead Time,lower_is_better,4,simulated_annealing,46.05,0.6874,45.0,46.5,4
+limited_resources,treated_patients,Treated Patients,higher_is_better,1,astar,13.4,0.6633,12.0,14.0,1
+limited_resources,treated_patients,Treated Patients,higher_is_better,1,simulated_annealing,13.4,0.6633,12.0,14.0,1
+limited_resources,treated_patients,Treated Patients,higher_is_better,1,cpsat,13.2,0.8718,11.0,14.0,1
+limited_resources,treated_patients,Treated Patients,higher_is_better,2,fifo,12.8,0.8718,11.0,14.0,2
+limited_resources,treated_patients,Treated Patients,higher_is_better,2,greedy,12.6,0.6633,11.0,13.0,2
+limited_resources,untreated_patients,Untreated Patients,lower_is_better,1,astar,4.6,0.6633,4.0,6.0,1
+limited_resources,untreated_patients,Untreated Patients,lower_is_better,1,simulated_annealing,4.6,0.6633,4.0,6.0,1
+limited_resources,untreated_patients,Untreated Patients,lower_is_better,2,cpsat,4.8,0.8718,4.0,7.0,2
+limited_resources,untreated_patients,Untreated Patients,lower_is_better,3,fifo,5.2,0.8718,4.0,7.0,3
+limited_resources,untreated_patients,Untreated Patients,lower_is_better,4,greedy,5.4,0.6633,5.0,7.0,4

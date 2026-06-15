@@ -1,0 +1,10 @@
+resource,count
+doctor,165
+isolation_room,3
+laboratory,16
+nurse,163
+observation_bed,47
+pharmacy,1
+resuscitation_room,63
+vital_sign_monitor,149
+xray_room,7

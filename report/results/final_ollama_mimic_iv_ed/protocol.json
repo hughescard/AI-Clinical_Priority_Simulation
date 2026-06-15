@@ -1,0 +1,98 @@
+{
+  "advanced_resource_preset": [
+    {
+      "capacity": 2,
+      "enabled": true,
+      "id": "doctor"
+    },
+    {
+      "capacity": 4,
+      "enabled": true,
+      "id": "nurse"
+    },
+    {
+      "capacity": 4,
+      "enabled": true,
+      "id": "observation_bed"
+    },
+    {
+      "capacity": 1,
+      "enabled": true,
+      "id": "resuscitation_room"
+    },
+    {
+      "capacity": 3,
+      "enabled": true,
+      "id": "vital_sign_monitor"
+    },
+    {
+      "capacity": 2,
+      "enabled": true,
+      "id": "laboratory"
+    },
+    {
+      "capacity": 1,
+      "enabled": true,
+      "id": "xray_room"
+    },
+    {
+      "capacity": 1,
+      "enabled": true,
+      "id": "ct_scanner"
+    },
+    {
+      "capacity": 1,
+      "enabled": true,
+      "id": "ultrasound_room"
+    },
+    {
+      "capacity": 1,
+      "enabled": true,
+      "id": "isolation_room"
+    },
+    {
+      "capacity": 1,
+      "enabled": true,
+      "id": "pharmacy"
+    },
+    {
+      "capacity": 1,
+      "enabled": true,
+      "id": "specialist"
+    }
+  ],
+  "algorithms": [
+    "fifo",
+    "greedy",
+    "astar",
+    "cpsat",
+    "simulated_annealing"
+  ],
+  "data_source": "mimic_iv_ed",
+  "duration_minutes": 480,
+  "fail_on_llm_fallback": true,
+  "generated_at": "2026-06-15T04:33:11.006337+00:00",
+  "llm_cache_path": "../data/processed/llm_cache_final_ollama_mimic.json",
+  "llm_cache_reused": false,
+  "llm_fallback_observed": 0,
+  "llm_fallback_order": [
+    "ollama",
+    "mock"
+  ],
+  "llm_fallback_to_mock": true,
+  "llm_provider": "ollama",
+  "max_llm_fallbacks": 0,
+  "ollama_base_url": "http://localhost:11434",
+  "ollama_model": "llama3.2:3b",
+  "ollama_timeout_seconds": 300.0,
+  "quick_mode": false,
+  "replications": 10,
+  "report_valid_llm_run": true,
+  "scenarios": [
+    "normal",
+    "high_demand",
+    "limited_resources"
+  ],
+  "seed_start": 42,
+  "use_advanced_resources": true
+}

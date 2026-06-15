@@ -1,35 +1,42 @@
-# Python
+# Local/generated files
+temp.env
+package-lock.json
+frontend/tsconfig.tsbuildinfo
+
+# Data and generated experiment outputs
+data/
+data/raw/
+data/processed/
+data/sample/
+experiments/results/
+experiments/final_runs/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.env.local
+backend/.env
+
+# Python environments and caches
+.venv/
+venv/
+env/
+backend/.venv/
 __pycache__/
-*.py[cod]
-*.pyo
-*.pyd
+**/__pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .coverage
 htmlcov/
 
-# Virtual environments
-.venv/
-venv/
-env/
-backend/.venv/
-
-# Environment files
-.env
-.env.*
-!.env.example
-temp.env
-*.env.local
-backend/.env
-
 # Node / frontend
 node_modules/
 frontend/node_modules/
-dist/
 frontend/dist/
+dist/
 .vite/
-*.tsbuildinfo
 
 # IDE / OS
 .vscode/
@@ -37,20 +44,13 @@ frontend/dist/
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-
-# Data and generated artifacts
-data/raw/
-data/sample/
-data/processed/
-experiments/results/
-experiments/final_runs/
-
 # LLM cache
 *llm_cache*.json
 
-# Build artifacts
+# Large generated outputs
+final_results.json
+final_analysis.json
+*.log
 *.zip
 *.tar
 *.tar.gz
