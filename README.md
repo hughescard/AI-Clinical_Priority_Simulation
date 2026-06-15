@@ -6,8 +6,9 @@ Final validated LLM configuration:
 
 - real provider used in the final report: `ollama`
 - model: `llama3.2:3b`
+- alternative supported real provider in the software: `mistral`
 - controlled fallback/testing provider only: `mock`
-- OpenAI, Gemini, and Mistral were not used in the final validated experiment
+- OpenAI and Gemini are not part of the final supported provider set
 
 ## Workflows
 
@@ -303,12 +304,26 @@ OLLAMA_TIMEOUT_SECONDS=300
 
 `mock` remains available only for deterministic tests and controlled fallback behavior. It was not used in the final validated run.
 
+### Mistral
+
+Mistral remains supported by the software as an alternative external provider.
+
+Example alternative configuration:
+
+```bash
+LLM_PROVIDER=mistral
+LLM_FALLBACK_ORDER=ollama,mock
+MISTRAL_API_KEY=your_key_here
+MISTRAL_MODEL=mistral-small-latest
+MISTRAL_TIMEOUT_SECONDS=120
+```
+
 ## Notes
 
 - Backend Docker services now include `backend` and `ollama`.
 - Final validated experiments used `ollama` with `--fail-on-llm-fallback`.
 - Mock remains the deterministic fallback for development and test coverage.
-- Legacy provider code may still remain internally for non-final compatibility, but only Ollama was used in the validated final report workflow.
+- Mistral remains supported as an alternative real provider, but the validated final report workflow used Ollama.
 - The frontend should continue to run locally with `npm run dev`.
 - Do not bake model downloads into the Docker image.
 - Do not commit real `.env` files, credentials, or clinical data.

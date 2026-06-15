@@ -38,12 +38,13 @@ Additional folders were created at the repository root for `data/`, `experiments
 
 Generated patients are enriched through a provider layer in `app/llm/provider.py`.
 
-Final validated provider scope:
+Supported real providers:
 
 - `ollama` local structured-output extraction through the Ollama HTTP API
+- `mistral` external structured-output extraction through the Mistral API
 - `mock` deterministic keyword rules used only for tests and controlled fallback behavior
 
-The final validated report run used Ollama only. Legacy provider code may still remain in the repository for compatibility and older tests, but it was not used in the validated final experiment.
+The final validated report run used Ollama only. Mistral remains supported by the backend as an alternative provider, but it was not used in the validated final experiment.
 
 Enrichment fields:
 
@@ -62,6 +63,9 @@ Environment variables:
 - `OLLAMA_BASE_URL` optional, local default `http://localhost:11434`
 - `OLLAMA_MODEL` optional, default `llama3.2:3b`
 - `OLLAMA_TIMEOUT_SECONDS` optional, recommended `300` for final validation runs
+- `MISTRAL_API_KEY` required only when `LLM_PROVIDER=mistral`
+- `MISTRAL_MODEL` optional, default `mistral-small-latest`
+- `MISTRAL_TIMEOUT_SECONDS` optional, recommended `120` for Mistral runs
 - `LLM_FALLBACK_TO_MOCK` optional, default `true`
 - `LLM_CACHE_PATH` optional file cache path
 
@@ -73,7 +77,7 @@ Cache keys include:
 - chief complaint
 - clinical description
 
-This prevents collisions between mock and Ollama enrichments for the same text in the final validated workflow.
+This prevents collisions between mock, Ollama, and Mistral enrichments for the same text.
 
 Safety notes:
 
@@ -105,6 +109,17 @@ export LLM_PROVIDER=ollama
 export OLLAMA_BASE_URL=http://localhost:11434
 export OLLAMA_MODEL=llama3.2:3b
 export OLLAMA_TIMEOUT_SECONDS=300
+export LLM_FALLBACK_TO_MOCK=true
+uvicorn app.main:app --reload
+```
+
+Run with alternative supported Mistral provider:
+
+```bash
+export LLM_PROVIDER=mistral
+export MISTRAL_API_KEY=your_key_here
+export MISTRAL_MODEL=mistral-small-latest
+export MISTRAL_TIMEOUT_SECONDS=120
 export LLM_FALLBACK_TO_MOCK=true
 uvicorn app.main:app --reload
 ```
@@ -531,4 +546,5 @@ curl -X POST http://127.0.0.1:8000/experiments/export/summary-csv \
 - All randomness is controlled with a seed.
 - The frontend is available under `../frontend`.
 - Local development can still use the deterministic mock extractor, but the final validated configuration uses Ollama only.
-- OpenAI, Gemini, and Mistral were not used in the final validated experiment.
+- Mistral remains supported as an alternative provider.
+- OpenAI and Gemini are not part of the final supported provider set.

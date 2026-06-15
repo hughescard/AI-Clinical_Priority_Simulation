@@ -574,7 +574,7 @@ def build_protocol(config: FinalValidationConfig, *, cache_reused: bool, validit
 
 
 def build_environment_snapshot(config: FinalValidationConfig, provider_validation: dict[str, Any]) -> dict[str, Any]:
-    return {
+    snapshot = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "python_version": sys.version,
         "platform": platform.platform(),
@@ -592,6 +592,12 @@ def build_environment_snapshot(config: FinalValidationConfig, provider_validatio
             "OLLAMA_TIMEOUT_SECONDS": config.ollama_timeout_seconds,
         },
     }
+
+    if config.llm_provider == "mistral":
+        snapshot["environment"]["MISTRAL_MODEL"] = os.getenv("MISTRAL_MODEL", settings.mistral_model)
+        snapshot["environment"]["MISTRAL_API_KEY_CONFIGURED"] = bool(os.getenv("MISTRAL_API_KEY", "").strip())
+
+    return snapshot
 
 
 def build_output_readme(config: FinalValidationConfig, *, cache_reused: bool, validity: dict[str, Any]) -> str:

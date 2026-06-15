@@ -25,7 +25,7 @@ Durante la corrida final validada:
 - el conteo total de fallback fue `0`
 - el enriquecimiento LLM de la corrida validada dependio solo de Ollama
 
-`mock` se mantuvo unicamente como mecanismo controlado para pruebas y para escenarios de respaldo durante desarrollo. OpenAI, Gemini y Mistral no se utilizaron en la validacion final reportada.
+`mock` se mantuvo unicamente como mecanismo controlado para pruebas y para escenarios de respaldo durante desarrollo. `Mistral` sigue siendo un proveedor alternativo soportado por el software, pero no se utilizo en la validacion final reportada. OpenAI y Gemini no forman parte del conjunto final de proveedores soportados para la entrega.
 
 ## Fuente de datos final
 

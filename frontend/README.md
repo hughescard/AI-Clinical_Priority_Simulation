@@ -49,4 +49,4 @@ The final validated project run used:
 - model: `llama3.2:3b`
 - fallback count: `0`
 
-`mock` remains available only for deterministic testing and controlled fallback inspection. OpenAI, Gemini, and Mistral were not used in the validated final report workflow.
+`mock` remains available only for deterministic testing and controlled fallback inspection. `mistral` remains supported by the software as an alternative provider. OpenAI and Gemini are not part of the final supported provider set.

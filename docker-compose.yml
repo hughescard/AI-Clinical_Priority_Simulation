@@ -14,10 +14,13 @@ services:
       LLM_PROVIDER: ${LLM_PROVIDER:-ollama}
       LLM_FALLBACK_ORDER: ${LLM_FALLBACK_ORDER:-ollama,mock}
       LLM_DEBUG: ${LLM_DEBUG:-false}
+      MISTRAL_MODEL: ${MISTRAL_MODEL:-mistral-small-latest}
+      MISTRAL_TIMEOUT_SECONDS: ${MISTRAL_TIMEOUT_SECONDS:-120}
       LLM_FALLBACK_TO_MOCK: ${LLM_FALLBACK_TO_MOCK:-true}
       LLM_CACHE_PATH: ${LLM_CACHE_PATH:-/app/data/processed/llm_cache.json}
       MIMIC_IV_ED_TRIAGE_CSV: ${MIMIC_IV_ED_TRIAGE_CSV:-/app/data/raw/mimic-iv-ed-demo/ed/triage.csv}
       MIETIC_CSV: ${MIETIC_CSV:-}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY:-}
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:3b}
       OLLAMA_TIMEOUT_SECONDS: ${OLLAMA_TIMEOUT_SECONDS:-300}

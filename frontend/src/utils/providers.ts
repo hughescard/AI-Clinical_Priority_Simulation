@@ -2,6 +2,9 @@ export function formatProviderName(provider: string | null | undefined): string 
   if (!provider) {
     return "n/a";
   }
+  if (provider === "mistral") {
+    return "Mistral";
+  }
   if (provider === "ollama") {
     return "Ollama";
   }
